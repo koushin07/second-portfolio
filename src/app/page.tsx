@@ -20,8 +20,8 @@ import { skill } from "./_model/skills";
 import SkillList from "@/components/skillList";
 import ProjectList from "@/components/projectList";
 import { Project } from "./_model/projects";
-
-
+import { Metadata } from "next";
+import { NewloadingAnimation } from "@/components/newLoadingAnimation";
 
 export default function Component() {
   const [activeSection, setActiveSection] = useState("intro");
@@ -46,7 +46,7 @@ export default function Component() {
         { name: "Junit" },
         { name: "Panaya" },
         { name: "Cycle labs" },
-      ]
+      ],
     },
     {
       name: "Programming Languages",
@@ -57,8 +57,7 @@ export default function Component() {
         { name: "JavaScript" },
         { name: "TypeScript" },
         { name: ".NET" },
-        
-      ]
+      ],
     },
     {
       name: "Databases & Servers",
@@ -68,48 +67,81 @@ export default function Component() {
         { name: "PGSQL" },
         { name: "SQL Server" },
         { name: "Oracle" },
-        { name: "MySQL"},
+        { name: "MySQL" },
         { name: "Ubuntu Server" },
-      ]
+      ],
     },
     {
       name: "Design & Frameworks",
       icon: Pen,
       skillSet: [
         { name: "Canva" },
+        { name: "Figma" },
+        { name: "Webflow" },
         { name: "Laravel" },
         { name: "VueJS" },
         { name: "Angular" },
         { name: "Spring Boot" },
         { name: "ASP.NET Core" },
         { name: "TailwindCSS" },
-      ]
-    }
-  ]
+      ],
+    },
+  ];
 
   const projects: Project[] = [
     {
       name: "ERIS: Equipment Resource Information System",
       description:
         "It provides information on the region's equipment resources, including their status, movement, and backtrack, allowing the RDRRMC Region 10 and local DRRM offices to monitor resources",
-        technologies:['Laravel', 'PusherJS', 'InertiaJS', 'VueJS', 'TailwindCSS'],
+      technologies: [
+        "Laravel",
+        "PusherJS",
+        "InertiaJS",
+        "VueJS",
+        "TailwindCSS",
+      ],
       link: "https://github.com/koushin07/ERIS",
+      source: "https://github.com/koushin07/ERIS",
+      isDisabled: true,
     },
     {
       name: "Date Me: Dating website",
       description:
         "Date Me offers users the opportunity to upload captivating profile images and engage in real-time chat, fostering meaningful connections in the online dating realm.",
-        technologies:['ASP.NET','Angular', 'SignalR', 'Ngx-Bootstrap'],
+      technologies: ["ASP.NET", "Angular", "SignalR", "Ngx-Bootstrap"],
 
       link: "https://date-me-three.vercel.app",
+      source: "https://date-me-three.vercel.app",
+      isDisabled: true,
     },
     {
       name: "ReadMindMe: Social Media",
       description:
         "where faith meets expression. Share your beliefs, thoughts, and perspectives on our unique social platform. Whether you're religious or not",
-        technologies:['ASP.NET','Angular', 'SignalR', 'PrimeNG', 'TailwindCSS'],
+      technologies: ["ASP.NET", "Angular", "SignalR", "PrimeNG", "TailwindCSS"],
 
+      isDisabled: true,
       link: "https://read-mind-me.vercel.app",
+      source: "https://read-mind-me.vercel.app",
+    },
+    {
+      name: "Lorem Hotel: Frontend Dashboard Application",
+      description:
+        "a modern frontend dashboard application designed to optimize hotel operations. Featuring an intuitive interface, it allows hotel staff to manage bookings, monitor occupancy, track room services, and maintain detailed guest profiles efficiently.",
+      technologies: ["chartJS", "ReactJS", "DaisyUI", "TailwindCSS"],
+      link: "https://hotel-lorem.vercel.app/",
+      source: "https://hotel-lorem.vercel.app/",
+      isDisabled: false,
+    },
+    {
+      name: "VLCC: Victorious Living Church",
+      description:
+        "a welcoming community focused on grace, truth, and the transformative power of the Holy Spirit.",
+      technologies: ["webflow", "figma"],
+      link: "https://vlcc.webflow.io/",
+      source:
+        "https://www.figma.com/design/jpRCxXvLo5s0OJLcJqmTPM/VLCC?node-id=31-552&t=6zxzZvnF74nL3L1z-1",
+      isDisabled: false,
     },
   ];
   useEffect(() => {
@@ -135,7 +167,7 @@ export default function Component() {
     window.addEventListener("scroll", handleScroll);
     setTimeout(() => {
       animateIntro();
-    }, 2400);
+    }, 100);
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -169,15 +201,26 @@ export default function Component() {
   }, []);
 
   const animateIntro = () => {
-    anime({
+    const animation = anime.timeline({
+      easing: "easeOutExpo",
+      duration: 2000,
+
+    })
+    .add({
       targets: introRef.current?.querySelectorAll(
-        "h1, p, .intro-line, .download-button"
+        "p, .intro-line, .download-button"
       ),
       translateY: [50, 0],
-      opacity: [0, 1],
+      // opacity: [0, 1],
+      delay: anime.stagger(200),
+      easing: "easeOutQuad",
+      duration: 600,
+    }).add({
+      targets: introRef.current?.querySelector(".name"),
+      translateY: [100, 0],
       delay: anime.stagger(100),
       easing: "easeOutQuad",
-      duration: 800,
+      duration: 600,
     });
   };
 
@@ -228,11 +271,18 @@ export default function Component() {
       easing: "easeOutQuad",
     });
   };
-
+  const dowloadCV = () => {
+    const link = document.createElement("a");
+    link.href = "/Miko_Canares_CV.pdf"; // Update the path
+    link.download = "Miko-Canares_CV.pdf"; // Set the filename
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#f4f1eb] to-[#e7e4de] text-[#2c2c2c] font-sans">
-      <LoadingAnimation />
+      <NewloadingAnimation />
       <header className="fixed top-0 left-0 w-full p-4 bg-[#f4f1eb] bg-opacity-90 backdrop-blur-sm z-10 shadow-sm">
         <nav>
           <ul className="flex justify-center space-x-8 text-sm">
@@ -258,16 +308,22 @@ export default function Component() {
 
       <main className="max-w-3xl mx-auto px-8 pt-24 pb-16">
         <section id="intro" className="mb-32 pt-16" ref={introRef}>
-          <h1 className="intro-line text-5xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight">
-            Miko Cañares
-          </h1>
-          <p className="intro-line text-xl md:text-2xl lg:text-3xl font-light mb-8 leading-relaxed">
-            <span className="font-normal">Full Stack Developer</span> building{" "}
-            <span className="font-normal">intuitive</span> and{" "}
-            <span className="font-normal">impactful</span> web applications.
-          </p>
+          <div className=" overflow-hidden">
+            <h1 className=" name text-5xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight">
+              Miko Cañares
+            </h1>
+          </div>
+          <div className=" overflow-hidden">
+            <p className="intro-line text-xl md:text-2xl lg:text-3xl font-light mb-8 leading-relaxed">
+              <span className="font-normal">Full Stack Developer</span> building{" "}
+              <span className="font-normal">intuitive</span> and{" "}
+              <span className="font-normal">impactful</span> web applications.
+            </p>
+          </div>
+
           <div className="w-16 h-1 bg-[#4a4a4a] intro-line mb-8"></div>
           <Button
+            onClick={dowloadCV}
             className="download-button bg-[#4a4a4a] text-white hover:bg-[#2c2c2c] transition-colors duration-300"
             onMouseEnter={animateHover}
             onMouseLeave={animateHoverExit}
@@ -280,7 +336,9 @@ export default function Component() {
         <section id="experience" className="mb-32" ref={sectionRefs.experience}>
           <h2 className="text-3xl mb-6 font-light">Work Experience</h2>
           <div className="mb-6">
-            <h3 className="text-xl font-normal mb-2">QA Specialist</h3>
+            <h3 className="text-xl font-normal mb-2">
+              Analyst II ERP Product Application
+            </h3>
             <p className="text-gray-600 mb-4 font-light">
               Experienced in manual and automation testing, with a strong
               background in ensuring software quality and reliability.
@@ -288,25 +346,22 @@ export default function Component() {
           </div>
           <div>
             <h3 className="text-xl font-normal mb-2">
-              Aspiring Web Developer & UX/UI Designer
+              System and Infrastructure Engineer - intern
             </h3>
             <p className="text-gray-600 mb-4 font-light">
-              Passionate about creating user-friendly and visually appealing web
-              experiences. Currently developing personal projects to build
-              expertise in this field.
+              Set up physical servers, installed essential software, and
+              resolved server issues to maintain performance and reliability.
             </p>
           </div>
         </section>
 
         <section id="skills" className="mb-32" ref={sectionRefs.skills}>
           <h2 className="text-3xl mb-6 font-light">Skills</h2>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {skills.map((skill) => (
-            <SkillList skills={skill} key={skill.name}/>
-          ))}
-            
-            
+            {skills.map((skill) => (
+              <SkillList skills={skill} key={skill.name} />
+            ))}
           </div>
         </section>
 
@@ -314,17 +369,17 @@ export default function Component() {
           <h2 className="text-3xl mb-6 font-light">Projects</h2>
 
           <div className="mb-12">
-            <h3 className="text-2xl font-light mb-4">
+            {/* <h3 className="text-2xl font-light mb-4">
               Web Development Projects
-            </h3>
+            </h3> */}
             <div className="space-y-8">
               {projects.map((project) => (
-            <ProjectList project={project}/>
+                <ProjectList project={project} />
               ))}
             </div>
           </div>
 
-          <div>
+          {/* <div>
             <h3 className="text-2xl font-light mb-4">
               Graphic Design Projects
             </h3>
@@ -341,7 +396,7 @@ export default function Component() {
               <Pen className="w-4 h-4 mr-1" />
               View Design Gallery
             </Link>
-          </div>
+          </div> */}
         </section>
 
         <section id="contact" className="mb-32" ref={sectionRefs.contact}>
